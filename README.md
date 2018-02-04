@@ -8,7 +8,7 @@ condition it does a new DNS A query.
 
 It makes use of my [DNS rebinding attack tool](https://github.com/h43z/dns-rebinding-tool)
 which provides a domain that resolves to 2 different IP addresses (first ip1 and
-after 3 seconds only resolves to IP2) and end responds with abitrary javascript included.
+after 3 seconds all new queries resolves to IP2) and end responds with abitrary javascript included.
 
 IP2 (45.55.45.223) uses nginx default_server and reponds with just a string.
 
@@ -47,3 +47,5 @@ var interval = setInterval(function(){
 }, ${waitTime})
 
 ```
+
+I put some tests I have run into [tests.txt](https://github.com/h43z/dns-cache-eviction/blob/master/tests.txt)
